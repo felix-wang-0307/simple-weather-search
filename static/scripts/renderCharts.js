@@ -63,7 +63,8 @@ function renderHourlyWeather(hourlyWeather) {
   const temperatures = [];
   const pressures = [];
   const winds = [];
-  const symbols = [];  // if you want to display weather symbols
+  const humidities = [];
+  let skip = false;
 
   hourlyWeather.forEach(item => {
     const x = new Date(item.startTime).getTime();
@@ -80,36 +81,38 @@ function renderHourlyWeather(hourlyWeather) {
       y: item.values.pressureSeaLevel,
     });
 
-    // Wind speed and direction (for windbarbs)
-    winds.push({
+    humidities.push({
       x: x,
-      value: item.values.windSpeed,
-      direction: item.values.windDirection,
+      y: item.values.humidity,
     });
 
-    // Optionally: add symbols based on weather conditions if needed
-    // symbols.push({ /* weather symbols */ });
+    // Wind speed and direction (for windbarbs)
+    if (!skip) {
+      winds.push({
+        x: x,
+        value: item.values.windSpeed,
+        direction: item.values.windDirection,
+      });
+    }
+    skip = !skip;
   });
 
   // Chart options similar to Meteogram prototype
   Highcharts.chart('hourly-weather', {
     chart: {
       type: 'spline',
-      height: 600,
-      scrollablePlotArea: {
-        minWidth: 720
-      }
     },
     title: {
-      text: 'Hourly Weather (Next Few Hours)'
+      text: 'Hourly Weather (Next 5 Days)'
     },
     xAxis: [{
       type: 'datetime',
-      tickInterval: 36e5, // one hour
+      tickInterval: 36000 * 2, // 2 hours
       labels: {
-        format: '{value:%H:%M}'  // Format to show hour
+        format: '{value:%H}'  // Format to show hour
       },
       crosshair: true,
+      gridLineWidth: 1,
     }],
     yAxis: [{ // Temperature Y-axis
       title: {
@@ -117,7 +120,7 @@ function renderHourlyWeather(hourlyWeather) {
       },
       labels: {
         format: '{value}°F'
-      }
+      },
     }, { // Pressure Y-axis
       title: {
         text: 'Pressure (inHg)',
@@ -156,12 +159,18 @@ function renderHourlyWeather(hourlyWeather) {
         valueSuffix: ' inHg'
       }
     }, {
+      name: 'Humidity',
+      data: humidities,
+      color: '#66ccff',
+      // show as bar
+      type: 'column',
+    }, {
       name: 'Wind Speed and Direction',
       type: 'windbarb',
       data: winds,
-      vectorLength: 18,
+      vectorLength: 8,
       yOffset: -20,
-      color: '#004d40',
+      color: '#565395',
       tooltip: {
         valueSuffix: ' mph'
       }
