@@ -50,9 +50,9 @@ def get_weather(latitude, longitude):
 
     data = response.json().get("data")
     if response.status_code != 200 or data is None:
-        return ({"success": False, "error": "Failed to fetch weather data"}, 500)
+        return {"success": False, "error": "Failed to fetch weather data"}, 500
 
-    return ({"success": True, "data": data}, 200)
+    return {"success": True, "data": data}, 200
 
 
 def get_geocode_info(address):
@@ -66,7 +66,7 @@ def get_geocode_info(address):
     )
 
     if response.status_code != 200:
-        return ({"success": False, "error": "Failed to fetch address info"}, 500)
+        return {"success": False, "error": "Failed to fetch address info"}, 500
 
     data = response.json().get("results")[0]
     coordinates = data.get("geometry").get("location")
