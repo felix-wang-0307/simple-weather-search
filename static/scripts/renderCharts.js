@@ -1,4 +1,4 @@
-import {Meteogram} from "./meteogram";
+import { Meteogram } from "./meteogram.js";
 
 function renderTemperatureRanges(weeklyWeather) {
   const dates = weeklyWeather.map(item => new Date(item.startTime).valueOf());  // getTimeStamp
@@ -66,152 +66,13 @@ function renderTemperatureRanges(weeklyWeather) {
   });
 }
 
-function fuck(hourlyWeather) {
-  console.log(hourlyWeather)
-  window.meteogram = new Meteogram(hourlyWeather, 'hourly-weather');
-
-
-
-  // Highcharts.ajax({
-  //   url,
-  //   dataType: 'json',
-  //   success: json => {
-  //     window.meteogram = new Meteogram(json, 'container');
-  //   },
-  //   error: Meteogram.prototype.error,
-  //   headers: {
-  //     // Override the Content-Type to avoid preflight problems with CORS
-  //     // in the Highcharts demos
-  //     'Content-Type': 'text/plain'
-  //   }
-  // });
-}
-
 function renderHourlyWeather(hourlyWeather) {
-  console.log("hourlyWeather", hourlyWeather);
-  const temperatures = [];
-  const pressures = [];
-  const winds = [];
-  const humidities = [];
-  let skip = false;
-
-  hourlyWeather.forEach(item => {
-    const x = new Date(item.startTime).getTime();
-
-    // Temperature
-    temperatures.push({
-      x: x,
-      y: item.values.temperature,
-    });
-
-    // Pressure
-    pressures.push({
-      x: x,
-      y: item.values.pressureSeaLevel,
-    });
-
-    humidities.push({
-      x: x,
-      y: item.values.humidity,
-    });
-
-    // Wind speed and direction (for windbarbs)
-    if (!skip) {
-      winds.push({
-        x: x,
-        value: item.values.windSpeed,
-        direction: item.values.windDirection,
-      });
-    }
-    skip = !skip;
-  });
-
-  // Chart options similar to Meteogram prototype
-  Highcharts.chart('hourly-weather', {
-    chart: {
-      type: 'spline',
-    },
-    title: {
-      text: 'Hourly Weather (Next 5 Days)'
-    },
-    xAxis: [{
-      type: 'datetime',
-      tickInterval: 36000 * 2, // 2 hours
-      labels: {
-        format: '{value:%H}'  // Format to show hour
-      },
-      crosshair: true,
-      gridLineWidth: 1,
-    }],
-    yAxis: [{ // Temperature Y-axis
-      title: {
-        text: 'Temperature (°F)'
-      },
-      labels: {
-        format: '{value}°F'
-      },
-    }, { // Pressure Y-axis
-      title: {
-        text: 'Pressure (inHg)',
-        align: 'high'
-      },
-      opposite: true,
-      labels: {
-        format: '{value} inHg'
-      }
-    }],
-    tooltip: {
-      shared: true,
-      useHTML: true,
-      formatter: function () {
-        return `<b>${Highcharts.dateFormat('%A %b %e %H:%M', this.x)}</b><br>
-                    <b>Temperature:</b> ${this.points[0].y}°F<br>
-                    <b>Pressure:</b> ${this.points[1].y} inHg<br>
-                    <b>Wind Speed:</b> ${this.points[2].point.value} mph<br>
-                    <b>Wind Direction:</b> ${this.points[2].point.direction}°`;
-      }
-    },
-    series: [{
-      name: 'Temperature',
-      data: temperatures,
-      color: '#FF3333',
-      tooltip: {
-        valueSuffix: '°F'
-      }
-    }, {
-      name: 'Pressure',
-      data: pressures,
-      yAxis: 1,
-      color: '#ffab00',
-      dashStyle: 'ShortDot',
-      tooltip: {
-        valueSuffix: ' inHg'
-      }
-    }, {
-      name: 'Humidity',
-      data: humidities,
-      color: '#66ccff',
-      // show as bar
-      type: 'column',
-    }, {
-      name: 'Wind Speed and Direction',
-      type: 'windbarb',
-      data: winds,
-      vectorLength: 8,
-      yOffset: -20,
-      color: '#565395',
-      tooltip: {
-        valueSuffix: ' mph'
-      }
-    }]
-  });
+  window.meteogram = new Meteogram(hourlyWeather, 'hourly-weather');
 }
 
 export const renderCharts = (weeklyWeather, hourlyWeather) => {
-  console.log("about to render charts");
   renderTemperatureRanges(weeklyWeather);
-  // renderHourlyWeather(hourlyWeather);
-  fuck(hourlyWeather);
+  renderHourlyWeather(hourlyWeather);
 }
 
 
