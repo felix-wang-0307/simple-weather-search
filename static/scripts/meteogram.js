@@ -130,15 +130,14 @@ Meteogram.prototype.getChartOptions = function () {
       shared: true,
       useHTML: true,
       headerFormat:
-          '<small>{point.x:%A, %b %e, %H:%M} - ' +
-          '{point.point.to:%H:%M}</small><br>' +
+          '<small>{point.x:%A, %b %e, %H:%M}</small><br>' +
           '<b>{point.point.symbolName}</b><br>'
 
     },
 
     xAxis: [{ // Bottom X axis
       type: 'datetime',
-      tickInterval: 8 * 36e5, // 8 hours
+      tickInterval: 8 * 36e5, // two hours
       minorTickInterval: 36e5, // one hour
       tickLength: 0,
       gridLineWidth: 1,
