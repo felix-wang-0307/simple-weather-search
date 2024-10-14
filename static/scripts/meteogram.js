@@ -120,7 +120,7 @@ Meteogram.prototype.getChartOptions = function () {
 
     credits: {
       text: 'Forecast from <a href="https://tomorrow.io">tomorrow.io</a>',
-      href: 'https://yr.no',
+      href: 'https://tomorrow.io',
       position: {
         x: -40
       }
