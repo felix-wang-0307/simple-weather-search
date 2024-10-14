@@ -1,9 +1,11 @@
+import {Meteogram} from "./meteogram";
+
 function renderTemperatureRanges(weeklyWeather) {
   const dates = weeklyWeather.map(item => new Date(item.startTime).valueOf());  // getTimeStamp
   const temperatureMax = weeklyWeather.map(item => item.values.temperatureMax);
   const temperatureMin = weeklyWeather.map(item => item.values.temperatureMin);
   let data = [];
-  for (let i = 0; i < weeklyWeather.length; i ++) {
+  for (let i = 0; i < weeklyWeather.length; i++) {
     data.push([dates[i], temperatureMax[i], temperatureMin[i]]);
   }
   Highcharts.chart('temperature-ranges', {
@@ -64,7 +66,29 @@ function renderTemperatureRanges(weeklyWeather) {
   });
 }
 
+function fuck(hourlyWeather) {
+  console.log(hourlyWeather)
+  window.meteogram = new Meteogram(hourlyWeather, 'hourly-weather');
+
+
+
+  // Highcharts.ajax({
+  //   url,
+  //   dataType: 'json',
+  //   success: json => {
+  //     window.meteogram = new Meteogram(json, 'container');
+  //   },
+  //   error: Meteogram.prototype.error,
+  //   headers: {
+  //     // Override the Content-Type to avoid preflight problems with CORS
+  //     // in the Highcharts demos
+  //     'Content-Type': 'text/plain'
+  //   }
+  // });
+}
+
 function renderHourlyWeather(hourlyWeather) {
+  console.log("hourlyWeather", hourlyWeather);
   const temperatures = [];
   const pressures = [];
   const winds = [];
@@ -186,6 +210,8 @@ function renderHourlyWeather(hourlyWeather) {
 export const renderCharts = (weeklyWeather, hourlyWeather) => {
   console.log("about to render charts");
   renderTemperatureRanges(weeklyWeather);
-  renderHourlyWeather(hourlyWeather);
+  // renderHourlyWeather(hourlyWeather);
+  fuck(hourlyWeather);
 }
+
 
