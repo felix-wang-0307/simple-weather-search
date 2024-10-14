@@ -1,62 +1,67 @@
 function renderTemperatureRanges(weeklyWeather) {
-  // Prepare the categories (dates) and temperature ranges
-  const categories = weeklyWeather.map(item => {
-    const date = new Date(item.startTime);
-    const options = {day: 'numeric', month: 'short'};
-    return date.toLocaleDateString("en-us", options);
-  });
+  const dates = weeklyWeather.map(item => new Date(item.startTime).valueOf());  // getTimeStamp
   const temperatureMax = weeklyWeather.map(item => item.values.temperatureMax);
   const temperatureMin = weeklyWeather.map(item => item.values.temperatureMin);
-  try {
-    Highcharts.chart('temperature-ranges', {
-      chart: {
-        type: 'arearange',
-        zoomType: 'x'
-      },
-      title: {
-        text: 'Temperature Ranges (Min, Max)'
-      },
-      xAxis: {
-        categories: categories,
-        tickmarkPlacement: 'on',
-        title: {
-          enabled: false
-        },
-        tickLength: 10,  // Length of the tick
-        tickPosition: 'inside', // Ensure the tick is placed inside
-        gridLineWidth: 1,  // Add a gridline to enhance the appearance
-        tickInterval: 1  // Ensure a tick mark for every category
-      },
-      yAxis: {
-        title: {
-          text: 'Temperature (°F)'
-        }
-      },
-      tooltip: {
-        crosshairs: true,
-        shared: true,
-        valueSuffix: '°F'
-      },
-      legend: {
-        enabled: false
-      },
-      series: [{
-        name: 'Temperatures',
-        data: temperatureMax.map((max, i) => [temperatureMin[i], max]),
-        color: 'orange',
-        fillColor: {
-          linearGradient: [0, 0, 0, 300],
-          stops: [
-            [0, 'rgba(255, 200, 0, 0.5)'],
-            [1, 'rgba(0, 0, 255, 0.5)']
-          ]
-        }
-      }]
-    });
-  } catch (error) {
-    console.error("Failed to render temperature ranges", error);
-    document.getElementById("temperature-ranges").innerHTML = "Failed to render temperature ranges";
+  let data = [];
+  for (let i = 0; i < weeklyWeather.length; i ++) {
+    data.push([dates[i], temperatureMax[i], temperatureMin[i]]);
   }
+  Highcharts.chart('temperature-ranges', {
+    chart: {
+      type: 'arearange',
+      zooming: {
+        type: 'x'
+      },
+      scrollablePlotArea: {
+        minWidth: 600,
+        scrollPositionX: 1
+      }
+    },
+    title: {
+      text: 'Temperature Ranges (Min, Max)'
+    },
+    xAxis: {
+      type: 'datetime',
+    },
+    yAxis: {
+      title: {
+        text: null
+      }
+    },
+    tooltip: {
+      crosshairs: true,
+      shared: true,
+      valueSuffix: '°F',
+      xDateFormat: '%A, %b %e'
+    },
+    legend: {
+      enabled: false
+    },
+    series: [{
+      name: 'Temperatures',
+      data: data,
+      marker: {
+        fillColor: '#58acf7',  // Set the points to light blue
+        lineWidth: 2,
+        lineColor: '#58acf7',
+        radius: 3
+      },
+      color: {
+        linearGradient: {
+          x1: 0,
+          x2: 0,
+          y1: 0,
+          y2: 1
+        },
+        stops: [
+          [0, '#ffab00'],
+          [1, '#66ccff']
+        ]
+      },
+      lineColor: '#ffab00',  // Set the line color to yellow
+      lineWidth: 2           // Set the line width to make it visible
+    }]
+  });
 }
 
 function renderHourlyWeather(hourlyWeather) {
