@@ -1,4 +1,7 @@
 /**
+ * The file is based on the meteogram chart demo from Highcharts: 
+ * https://www.highcharts.com/demo/highcharts/combo-meteogram
+ * 
  * This is the main file for the meteogram chart. The functionality is as follows:
  * - Loads weather forecast from https://tomorrow.io in form of a JSON service.
  * - When the data arrives async, a Meteogram instance is created. We have
@@ -342,14 +345,10 @@ Meteogram.prototype.error = function () {
  * with yr.no's specific data format
  */
 Meteogram.prototype.parseHourlyWeatherData = function () {
-  let pointStart;
-
   if (!this.json) {
     return this.error();
   }
-
   let i = 0;
-
   for (let item of this.json) {
     const values = item.values;
     const x = Date.parse(item.startTime);
@@ -363,57 +362,12 @@ Meteogram.prototype.parseHourlyWeatherData = function () {
     }
     this.pressures.push({x, y: values.pressureSeaLevel});
     this.temperatures.push({x, y: values.temperature});
-    // if (i === 0) {
-    //   pointStart = (x + to) / 2;
-    // }
-    i++;
+    i ++;
   }
-
-  // Loop over hourly (or 6-hourly) forecasts
-  // this.json.properties.timeseries.forEach((node, i) => {
-  //
-  //   const x = Date.parse(node.time),
-  //       nextHours = node.data.next_1_hours || node.data.next_6_hours,
-  //       symbolCode = nextHours && nextHours.summary.symbol_code,
-  //       to = node.data.next_1_hours ? x + 36e5 : x + 6 * 36e5;
-  //
-  //   if (to > pointStart + 48 * 36e5) {
-  //     return;
-  //   }
-  //
-  //   this.temperatures.push({
-  //     x,
-  //     y: node.data.instant.details.air_temperature,
-  //     // custom options used in the tooltip formatter
-  //     to,
-  //   });
-  //
-  //   this.humidities.push({
-  //     x,
-  //     y: nextHours.details.precipitation_amount
-  //   });
-  //
-  //   if (i % 2 === 0) {
-  //     this.winds.push({
-  //       x,
-  //       value: node.data.instant.details.wind_speed,
-  //       direction: node.data.instant.details.wind_from_direction
-  //     });
-  //   }
-  //
-  //   this.pressures.push({
-  //     x,
-  //     y: node.data.instant.details.air_pressure_at_sea_level
-  //   });
-  //
-  //   if (i === 0) {
-  //     pointStart = (x + to) / 2;
-  //   }
-  // });
 
   // Create the chart when the data is loaded
   this.createChart();
 };
-// End of the Meteogram protype
+// End of the Meteogram prototype
 
 export { Meteogram };
