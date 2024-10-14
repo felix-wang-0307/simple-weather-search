@@ -16,7 +16,7 @@ def get_weather(latitude, longitude):
     """
     print("Incoming request for weather data", latitude, longitude)
     if latitude is None or longitude is None:
-        return ({"success": False, "error": "Missing latitude or longitude"}, 400)
+        return {"success": False, "error": "Missing latitude or longitude"}, 400
 
     response = requests.get(
         WEATHER_API,
