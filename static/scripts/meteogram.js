@@ -1,20 +1,15 @@
 /**
- * This is a complex demo of how to set up a Highcharts chart, coupled to a
- * dynamic source and extended by drawing image sprites, wind arrow paths
- * and a second grid on top of the chart. The purpose of the demo is to inpire
- * developers to go beyond the basic chart types and show how the library can
- * be extended programmatically. This is what the demo does:
- *
- * - Loads weather forecast from www.yr.no in form of a JSON service.
+ * This is the main file for the meteogram chart. The functionality is as follows:
+ * - Loads weather forecast from https://tomorrow.io in form of a JSON service.
  * - When the data arrives async, a Meteogram instance is created. We have
  *   created the Meteogram prototype to provide an organized structure of the
  *   different methods and subroutines associated with the demo.
- * - The parseYrData method parses the data from www.yr.no into several parallel
+ * - The parseHourlyWeatherData method parses the data from https://tomorrow.io into several parallel
  *   arrays. These arrays are used directly as the data option for temperature,
  *   precipitation and air pressure.
  * - After this, the options structure is built, and the chart generated with
  *   the parsed data.
- * - On chart load, weather icons and the frames for the wind arrows are
+ * - On chart load, weather statistics and the frames for the wind arrows are
  *   rendered using custom logic.
  */
 
