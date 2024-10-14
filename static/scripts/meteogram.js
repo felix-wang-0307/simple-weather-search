@@ -138,7 +138,7 @@ Meteogram.prototype.getChartOptions = function () {
 
     xAxis: [{ // Bottom X axis
       type: 'datetime',
-      tickInterval: 2 * 36e5, // two hours
+      tickInterval: 8 * 36e5, // 8 hours
       minorTickInterval: 36e5, // one hour
       tickLength: 0,
       gridLineWidth: 1,
@@ -150,7 +150,7 @@ Meteogram.prototype.getChartOptions = function () {
       offset: 30,
       showLastLabel: true,
       labels: {
-        format: '{value:%H}'
+        format: '{value:%H}',
       },
       crosshair: true
     }, { // Top X axis
