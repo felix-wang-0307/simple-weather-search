@@ -1,3 +1,10 @@
+/**
+ * The renderTemperatureRanges function is implemented based on the Highcharts demo:
+ * https://www.highcharts.com/demo/highcharts/arearange
+ * 
+ * The renderCharts function is exported and called with the weeklyWeather and hourlyWeather
+ * data, and it renders the temperature ranges and the hourly weather chart.
+ */
 import { Meteogram } from "./meteogram.js";
 
 function renderTemperatureRanges(weeklyWeather) {
@@ -8,6 +15,8 @@ function renderTemperatureRanges(weeklyWeather) {
   for (let i = 0; i < weeklyWeather.length; i++) {
     data.push([dates[i], temperatureMax[i], temperatureMin[i]]);
   }
+  // The data array should look like this:
+  // [[date1, max1, min1], [date2, max2, min2], ...]
   Highcharts.chart('temperature-ranges', {
     chart: {
       type: 'arearange',
@@ -60,8 +69,8 @@ function renderTemperatureRanges(weeklyWeather) {
           [1, '#66ccff']
         ]
       },
-      lineColor: '#ffab00',  // Set the line color to yellow
-      lineWidth: 2           // Set the line width to make it visible
+      lineColor: '#ffab00',  // yellow
+      lineWidth: 2          
     }]
   });
 }
