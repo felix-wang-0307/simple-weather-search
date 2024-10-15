@@ -20,7 +20,6 @@ function Meteogram(json, container) {
   // Parallel arrays for the chart data, these are populated as the JSON file
   // is loaded
   this.humidities = [];
-  this.precipitationsError = []; // Only for some data sets
   this.winds = [];
   this.temperatures = [];
   this.pressures = [];
@@ -137,7 +136,7 @@ Meteogram.prototype.getChartOptions = function () {
 
     xAxis: [{ // Bottom X axis
       type: 'datetime',
-      tickInterval: 8 * 36e5, // two hours
+      tickInterval: 8 * 36e5, // 8 hours
       minorTickInterval: 36e5, // one hour
       tickLength: 0,
       gridLineWidth: 1,
@@ -341,7 +340,8 @@ Meteogram.prototype.error = function () {
 
 /**
  * Handle the data. This part of the code is not Highcharts specific, but deals
- * with yr.no's specific data format
+ * with tomorrow.io's specific data format
+ * See https://docs.tomorrow.io/reference/data-layers-overview for more info
  */
 Meteogram.prototype.parseHourlyWeatherData = function () {
   if (!this.json) {
