@@ -39,6 +39,7 @@ export async function submitForm(event) {
     currentWeatherDiv.innerHTML = "No records have been found.";
   } finally {
     weatherDisplayDiv.style.display = "flex";  // Show the weather display anyway
+    document.getElementById("daily-weather").style.display = "none";
   }
 }
 
