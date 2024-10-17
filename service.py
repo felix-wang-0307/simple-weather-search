@@ -18,35 +18,43 @@ def get_weather(latitude, longitude):
     if latitude is None or longitude is None:
         return {"success": False, "error": "Missing latitude or longitude"}, 400
 
-    response = requests.get(
-        WEATHER_API,
-        params={
-            "location": f"{latitude},{longitude}",
-            "apikey": os.getenv("TOMORROW_API_KEY"),
-            "fields": [
-                "temperature",
-                "temperatureApparent",
-                "temperatureMin",
-                "temperatureMax",
-                "windSpeed",
-                "windDirection",
-                "humidity",
-                "pressureSeaLevel",
-                "uvIndex",
-                "weatherCode",
-                "precipitationProbability",
-                "precipitationType",
-                "sunriseTime",
-                "sunsetTime",
-                "visibility",
-                "moonPhase",
-                "cloudCover",
-            ],
-            "units": "imperial",
-            "timesteps": ["current", "1h", "1d"],
-            "timezone": "America/Los_Angeles",
-        },
-    )
+    def fetch_api (api_key):
+        return requests.get(
+            WEATHER_API,
+            params={
+                "location": f"{latitude},{longitude}",
+                "apikey": api_key,
+                "fields": [
+                    "temperature",
+                    "temperatureApparent",
+                    "temperatureMin",
+                    "temperatureMax",
+                    "windSpeed",
+                    "windDirection",
+                    "humidity",
+                    "pressureSeaLevel",
+                    "uvIndex",
+                    "weatherCode",
+                    "precipitationProbability",
+                    "precipitationType",
+                    "sunriseTime",
+                    "sunsetTime",
+                    "visibility",
+                    "moonPhase",
+                    "cloudCover",
+                ],
+                "units": "imperial",
+                "timesteps": ["current", "1h", "1d"],
+                "timezone": "America/Los_Angeles",
+            },
+        )
+
+    try:
+        response = fetch_api(os.getenv("TOMORROW_API_KEY"))
+        if response.status_code != 200:
+            raise Exception("Failed to fetch weather data")
+    except Exception as e:
+        response = fetch_api(os.getenv("TOMORROW_API_FAILOVER_KEY"))
 
     data = response.json().get("data")
     if response.status_code != 200 or data is None:
@@ -66,9 +74,13 @@ def get_geocode_info(address):
     )
 
     if response.status_code != 200:
-        return {"success": False, "error": "Failed to fetch address info"}, 500
+        return {"success": False, "error": "Failed to fetch address info"}, 501
 
-    data = response.json().get("results")[0]
+    data = response.json().get("results")
+    if data and len(data) > 1:
+        data = data[0]
+    else:
+        return {"success": False, "error": "Failed to fetch address info"}, 501
     coordinates = data.get("geometry").get("location")
     formatted_address = data.get("formatted_address")
     return {
