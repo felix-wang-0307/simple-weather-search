@@ -74,13 +74,14 @@ def get_geocode_info(address):
     )
 
     if response.status_code != 200:
-        return {"success": False, "error": "Failed to fetch address info"}, 501
+        return {"success": False, "error": "Failed to fetch address info"}, 500
 
     data = response.json().get("results")
-    if data and len(data) > 1:
+    if data and len(data) > 0:
         data = data[0]
     else:
-        return {"success": False, "error": "Failed to fetch address info"}, 501
+        print(response.json())
+        return {"success": False, "error": "Failed to fetch address info"}, 500
     coordinates = data.get("geometry").get("location")
     formatted_address = data.get("formatted_address")
     return {
