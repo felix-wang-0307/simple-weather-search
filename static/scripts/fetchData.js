@@ -26,7 +26,7 @@ async function fetchGeocoding(street, city, state) {
   const address = `${street}, ${city}, ${state}`;
   const url = `/geocoding?address=${address}`;
   const data = await fetch(url).then(response => response.json());
-  if (!data.success || !data.data?.results?.length) {
+  if (!data.success) {
     throw new Error('Failed to fetch geocoding data');
   }
   return data.data;

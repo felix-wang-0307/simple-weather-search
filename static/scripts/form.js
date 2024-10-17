@@ -34,7 +34,8 @@ export async function submitForm(event) {
       renderCharts(weeklyWeather, hourlyWeather);
     });
   } catch (error) {
-    const currentWeatherDiv = document.getElementById("current-weather");
+    console.error(error);
+    const currentWeatherDiv = document.getElementById("current-weather-box");
     currentWeatherDiv.innerHTML = "No records have been found.";
   } finally {
     weatherDisplayDiv.style.display = "flex";  // Show the weather display anyway
