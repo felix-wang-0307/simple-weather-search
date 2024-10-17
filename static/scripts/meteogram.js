@@ -350,7 +350,9 @@ Meteogram.prototype.parseHourlyWeatherData = function () {
   let i = 0;
   for (let item of this.json) {
     const values = item.values;
-    const x = Date.parse(item.startTime);
+    const startTime = new Date(item.startTime);
+    startTime.setHours(startTime.getHours() - 7);  // Convert to Los Angeles time
+    const x = startTime.valueOf();  // get the timestamp
     this.humidities.push({x, y: parseInt(values.humidity)});
     if (i % 2 === 0) {
       this.winds.push({
