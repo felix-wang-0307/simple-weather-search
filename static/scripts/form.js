@@ -33,12 +33,13 @@ export async function submitForm(event) {
       console.log("Daily weather selected");
       renderCharts(weeklyWeather, hourlyWeather);
     });
+    weatherDisplayDiv.style.display = "flex";  // Show the weather display anyway
+    document.getElementById("no-result").style.display = "none";
   } catch (error) {
     console.error(error);
-    const currentWeatherDiv = document.getElementById("current-weather-box");
-    currentWeatherDiv.innerHTML = "No records have been found.";
+    document.getElementById("no-result").style.display = "flex";
+    weatherDisplayDiv.style.display = "none";  // Hide the weather display
   } finally {
-    weatherDisplayDiv.style.display = "flex";  // Show the weather display anyway
     document.getElementById("daily-weather").style.display = "none";
   }
 }
